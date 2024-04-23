@@ -1,0 +1,21 @@
+<h1>Flight Booker</h1>
+
+<%= form_with url: flights_path, method: :get do %>
+    <%= label_tag :departure_airport %>
+    <%= collection_select :flight, :departure_airport_id, Airport.all, :id, :code, prompt: true, selected: params[:flight]&.[](:departure_airport_id) %>
+
+    <%= label_tag :arrival_airport %>
+    <%= collection_select :flight, :arrival_airport_id, Airport.all, :id, :code, prompt: true, selected: params[:flight]&.[](:arrival_airport_id) %>
+
+    <%= label_tag :start_datetime %>
+    <%= date_select :flight, :start_datetime, default: @start_date, prompt: { month: 'Select month', day: 'Select day', year: 'Select year' }%>
+
+    <%= submit_tag "Search" %>
+<% end %>
+
+<h2>Search Results</h2>
+
+<% @flights.each do |flight| %>
+    <p><%= flight.departure_airport.code %> to <%= flight.arrival_airport.code %> on <%= flight.start_datetime.strftime("%B %d, %Y at %I:%M %p") %>
+    Duration: <%= flight.flight_duration %>hrs</p>
+<% end %>
