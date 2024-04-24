@@ -8,16 +8,23 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Airport.find_or_create_by(code: 'JFK')
-Airport.find_or_create_by(code: 'LAX')
-Airport.find_or_create_by(code: 'ORD')
-Airport.find_or_create_by(code: 'DFW')
-Airport.find_or_create_by(code: 'ATL')
 
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'JFK'), arrival_airport: Airport.find_by(code: 'LAX'), start_datetime: '2024-04-15 19:30:34', flight_duration: 6.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'LAX'), arrival_airport: Airport.find_by(code: 'JFK'), start_datetime: '2024-04-26 19:30:34', flight_duration: 6.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'ORD'), arrival_airport: Airport.find_by(code: 'DFW'), start_datetime: '2024-04-10 19:30:34', flight_duration: 2.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'DFW'), arrival_airport: Airport.find_by(code: 'ORD'), start_datetime: '2024-04-27 19:30:34', flight_duration: 5.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'ATL'), arrival_airport: Airport.find_by(code: 'JFK'), start_datetime: '2024-04-04 19:30:34', flight_duration: 7.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'JFK'), arrival_airport: Airport.find_by(code: 'ATL'), start_datetime: '2024-04-22 19:30:34', flight_duration: 4.5)
-Flight.find_or_create_by(departure_airport: Airport.find_by(code: 'DFW'), arrival_airport: Airport.find_by(code: 'ORD'), start_datetime: '2024-04-27 12:30:34', flight_duration: 5.5)
+Flight.delete_all
+Airport.delete_all
+
+# Create airports
+airport_codes = ['JFK', 'LAX', 'ORD', 'DFW', 'ATL', 'SFO', 'SEA', 'MIA', 'BOS', 'PHL'].shuffle
+airports = airport_codes.map do |code|
+  Airport.find_or_create_by(code: code)
+end
+
+# Create flights
+airports.each do |departure_airport|
+  (airports - [departure_airport]).each do |arrival_airport|
+    rand(1..5).times do
+      start_datetime = Faker::Time.forward(days: 23, period: :day)
+      flight_duration = rand(1.5..10.0).round(2)
+      Flight.create!(departure_airport: departure_airport, arrival_airport: arrival_airport, start_datetime: start_datetime, flight_duration: flight_duration)
+    end
+  end
+end
