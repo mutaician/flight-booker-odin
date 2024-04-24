@@ -1,3 +1,5 @@
+
+<%= link_to "Home", root_path %>
 <h1>Flight Booker</h1>
 
 <%= form_with url: flights_path, method: :get do %>
@@ -7,15 +9,25 @@
     <%= label_tag :arrival_airport %>
     <%= collection_select :flight, :arrival_airport_id, Airport.all, :id, :code, prompt: true, selected: params[:flight]&.[](:arrival_airport_id) %>
 
+    <%= label_tag :passengers %>
+    <%= select_tag :passengers, options_for_select([1, 2, 3, 4], selected: params[:passengers]) %>
+
     <%= label_tag :start_datetime %>
-    <%= date_select :flight, :start_datetime, default: @start_date, prompt: { month: 'Select month', day: 'Select day', year: 'Select year' }%>
+    <%# collection_select :flight, :start_datetime, Flight.all, :start_datetime, :start_datetime, prompt: true, selected: params[:flight]&.[](:start_datetime) %>
+    <%= select_tag :start_datetime, options_for_select(Flight.pluck(:start_datetime).map { |datetime| datetime.to_date }.uniq, selected: params[:start_datetime]), prompt: 'Select date' %>
+
 
     <%= submit_tag "Search" %>
 <% end %>
 
 <h2>Search Results</h2>
 
-<% @flights.each do |flight| %>
-    <p><%= flight.departure_airport.code %> to <%= flight.arrival_airport.code %> on <%= flight.start_datetime.strftime("%B %d, %Y at %I:%M %p") %>
-    Duration: <%= flight.flight_duration %>hrs</p>
+<%= form_with url: new_booking_path, method: :get do %>
+    <%= hidden_field_tag :passengers, params[:passengers] %>
+    <% @flights.each do |flight| %>
+        <%= radio_button_tag :flight_id, flight.id %>
+        <%= label_tag "flight_#{flight.id}", "#{flight.departure_airport.code} to #{flight.arrival_airport.code} on #{flight.start_datetime.strftime("%B %d, %Y at %I:%M %p")} Duration: #{flight.flight_duration}hrs" %>
+        <br>
+    <% end %>
+    <%= submit_tag "Book Flight" %>
 <% end %>
