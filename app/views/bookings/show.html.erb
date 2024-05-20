@@ -1,17 +1,68 @@
 <h2>Booking Information</h2>
 
-</p>
+<p>
     Flight ID: <%= @booking.flight_id %><br>
     Departure Airport: <%= @booking.flight.departure_airport.code %><br>
     Arrival Airport: <%= @booking.flight.arrival_airport.code %><br>
-    Start Date: <%= @booking.flight.start_datetime %>
+    Start Date: <%= l(@booking.flight.start_datetime, format: :long) %><br>
 </p>
 
 <h2>Passenger Information</h2>
 
-<% @booking.passengers.each do |passenger| %>
-    <p>
-        Name: <%= passenger.name %><br>
-        Email: <%= passenger.email %>
-    </p>
-<% end %>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @booking.passengers.each do |passenger| %>
+            <tr>
+                <td><%= passenger.name %></td>
+                <td><%= passenger.email %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<p>
+    <%= link_to 'Back to Flights', flights_path %>
+</p>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>

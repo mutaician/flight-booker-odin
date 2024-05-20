@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Confirmation</title>
+</head>
+<body>
+    <h1>Ticket Confirmation</h1>
+    <p>Dear <%= @passenger.name %>,</p>
+    <p>Your booking has been confirmed. Here are the details:</p>
+    <ul>
+        <li>Flight: <%= @booking.flight_id %></li>
+        <li>Departure Time: <%= l(@booking.flight.start_datetime, format: :long) %></li>
+        <li>Arrival Time: <%= l(@booking.flight.start_datetime + @booking.flight.flight_duration.hours, format: :long) %></li> 
+        <li>Passenger Name: <%= @passenger.name %></li>
+        <li>Passenger Email: <%= @passenger.email %></li>
+    </ul>
+    <p>Thank you for choosing our airline. We look forward to serving you!</p>
+</body>
+</html>

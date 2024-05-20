@@ -1,4 +1,4 @@
-<%= form_with model: @booking, url: bookings_path do |f| %>
+<%= form_with(model: @booking, url: bookings_path, local: true, data: {controller: "passenger"} )do |f| %>
     <%# errors%>
     <% if @booking.errors.any? %>
         <div id="error_explanation">
@@ -23,15 +23,20 @@
 
     <%= f.hidden_field :flight_id, value: @flight.id %>
 
-    <%= f.fields_for :passengers do |passenger_form| %>
-        <h4>Passenger Information</h4>
+    <div data-passenger-target="container" >
+        <%= f.fields_for :passengers do |passenger_form| %>
+            <%= render 'passenger_fields', f: passenger_form %>
+        <% end %>
+    </div>
 
-        <%= passenger_form.label :name %>
-        <%= passenger_form.text_field :name %>
+    <template data-passenger-target="template" >
+        <%= f.fields_for :passengers, Passenger.new, child_index: 'NEW_RECORD' do |passenger_form| %>
+            <%= render 'passenger_fields', f: passenger_form %>
+        <% end %>
+    </template>
 
-        <%= passenger_form.label :email %>
-        <%= passenger_form.text_field :email %>
-    <% end %>
+    <button data-action="click->passenger#addPassenger">Add Passenger</button>
+
     <br><br>
     <%= f.submit "Create Booking" %>
 <% end %>

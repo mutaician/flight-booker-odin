@@ -1,0 +1,12 @@
+
+<div class="passenger-field" data-controller="passenger" > 
+    <h4>Passenger Information</h4>
+
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+
+    <button data-action="click->passenger#removePassenger">Remove Passenger</button>
+</div>

@@ -4,17 +4,17 @@
 <%= form_with url: flights_path, method: :get do %>
     <h2>Flight Details</h2>
     <%= label_tag :departure_airport %>
-    <%= collection_select :flight, :departure_airport_id, Airport.all, :id, :code, prompt: true, selected: params[:flight]&.[](:departure_airport_id) %>
+    <%= collection_select :flight, :departure_airport_id, Airport.all, :id, :code, prompt: true %>
 
     <%= label_tag :arrival_airport %>
-    <%= collection_select :flight, :arrival_airport_id, Airport.all, :id, :code, prompt: true, selected: params[:flight]&.[](:arrival_airport_id) %>
+    <%= collection_select :flight, :arrival_airport_id, Airport.all, :id, :code, prompt: true %>
 
     <%= label_tag :passengers, 'Tickets'%>
-    <%= select_tag :passengers, options_for_select([1, 2, 3, 4], selected: params[:passengers]) %>
+    <%= select_tag :passengers, options_for_select([1, 2, 3, 4]) %>
 
     <%= label_tag :start_datetime, 'Start Date' %>
     <%# collection_select :flight, :start_datetime, Flight.all, :start_datetime, :start_datetime, prompt: true, selected: params[:flight]&.[](:start_datetime) %>
-    <%= select_tag :start_datetime, options_for_select(Flight.pluck(:start_datetime).map { |datetime| datetime.to_date }.uniq.sort, selected: params[:start_datetime]), prompt: 'Select date' %>
+    <%= select_tag :start_datetime, options_for_select(Flight.pluck(:start_datetime).map { |datetime| datetime.to_date }.uniq.sort), prompt: 'Select date' %>
     <%# date_field_tag :start_datetime, params[:start_datetime] %>
 
     <%= submit_tag "Search" %>
